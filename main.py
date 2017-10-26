@@ -12,6 +12,7 @@ if __name__ == '__main__':
 	#create object
 	tweetCrawler = crawler.TweetCrawler()
 
+	print('grab user profile.')
 	userID_list = ['34373370', '26257166', '12579252']
 	#grab profile
 	userProfileList = [];
@@ -32,6 +33,7 @@ if __name__ == '__main__':
 	    	writer.writerow({'user_id': user.id, 'screen_name': user.screen_name, 'name': user.name, 'location': user.location, 'description': user.description, 'N_followes': user.followers_count, 'N_friends': user.friends_count, 'N_statues': user.statuses_count, 'URL': user.url})
 
 	#grab social Network Information
+	print('grab social Network Information.')
 	df = pd.DataFrame()
 	for userID in userID_list:
 		friendNameList = tweetCrawler.get_friends(userID, 20)
@@ -44,9 +46,10 @@ if __name__ == '__main__':
 	filePath = 'output'+os.sep+'socialNetwork.csv'
 	df.to_csv(filePath)
 
-	#search tweets by keyword
+	# search tweets by keyword
+	print('search tweets by keyword:')
 	query = 'weather'
-	count = 50
+	count = 20
 	tweets = tweetCrawler.search_tweetsbyKeyword(query, count)
 	print('found',len(tweets),'tweets by keyword(weather)')
 	#save json file
@@ -57,6 +60,7 @@ if __name__ == '__main__':
 			json.dump(tweet._json, f)
 			f.write('\n')	
 
+	print('search tweets by region:')
 	latitude = '41.63'
 	longitude = '-86.33'
 	range = '20'
@@ -68,6 +72,7 @@ if __name__ == '__main__':
 		for tweet in tweets:
 			#save json line by line
 			json.dump(tweet._json, f)
+			# json.dump(tweet._json,f,sort_keys = True,indent = 4)
 			f.write('\n')
 
 	print("done")
