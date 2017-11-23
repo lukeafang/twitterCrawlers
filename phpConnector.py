@@ -40,5 +40,12 @@ elif args.mode == "mode2":
 	count = 20
 	tweets = tweetCrawler.search_tweetsbyKeyword(query, count)
 	print('found',len(tweets),'tweets by keyword(weather)')
+	#save json file
+	filePath = 'output'+os.sep+'tweets_keyword.json'
+	with open(filePath, 'w') as f:
+		for tweet in tweets:
+			#save json line by line
+			json.dump(tweet._json, f)
+			f.write('\n')	
 else:
 	print("unknown")
