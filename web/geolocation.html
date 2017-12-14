@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Twitter Data Crawler</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link href="twitter.css" rel="stylesheet" type="text/css"/>
+
+ 
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Twitter Data Crawler</h1>
+    </header>
+
+    <nav>
+      <ul class="nav nav-tabs">
+       <li><a href="keyword.html">Keyword</a></li>
+       <li><a href="geolocation.html">Geolocation</a></li>
+      </ul>
+    </nav>
+
+ <!-- <div class="left-col">
+      <div class="form-group">
+        <label>Longitude:</label>
+        <input type="text" class="form-control" id="longitude">
+        <label>Latitude:</label>
+        <input type="text" class="form-control" id="latitude">
+         <label>Range:</label>
+        <input type="text" class="form-control" id="range">
+        <input type="button" class="btn btn-info" value="search" id="search">
+      </div>
+      <div class="group">
+        <h4>Monkey King Group</h4>
+        <ul>
+          <li>Xuejian, Li</li>
+          <li>Kuo Chi, Fang</li>
+          <li>Xitong, Zhou</li>
+          <li>Sichun, Gao</li>
+        </ul>
+      </div>
+    </div>
+	 -->   
+    <main>
+     <div id="map" style="height:300px"></div>
+      <table class="table table-hover"; style="margin-top: 5%">
+        <thead>
+          <tr>
+            <th> Time </th>
+            <th> Text </th>
+            <th> Location </th>
+            <th> UserID </th>
+          </tr>
+        </thead>
+        <tbody id="data_table">
+         
+        </tbody>
+      </table>
+    </main>
+  </div>
+ 
+</body>
+<script type="text/javascript" src="jquery.min.js"></script>
+ <script src="bootstrap.min.js"></script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSdz_ZI9f08EFT0BOhZcijJ37_tPh-6tQ&callback=goMap&language=en"
+    async defer></script>
+<script>
+function ContentMethod(user_data) {
+    return '<table class="table table-bordered"><tr><td>Name</td><td>'+user_data.name+'</td></tr>' +
+        '<tr><td>Screen_name</td><td>'+user_data.screen_name+'</td></tr>' +
+        '<tr><td>Location</td><td>'+user_data.location+'</td></tr>'+
+        '<tr><td>Follow</td><td>'+user_data.N_followes+'</td></tr>'+
+        '<tr><td>Friends</td><td>'+user_data.N_friends+'</td></tr>'+
+        '<tr><td>URL</td><td>'+user_data.URL+'</td></tr>'+
+        '<tr><td>Description</td><td>'+user_data.description+'</td></tr></table>';
+  }
+function goMap() {
+    // Create a map object and specify the DOM element for display.
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -34.397, lng: 150.644},
+      zoom: 10
+    });
+    var marker=null;//marker
+    //add click event
+    map.addListener('click',function(e){
+    	//clear prious marker if exists
+    	if(marker!=null){
+    		marker.setMap(null);
+    	}
+    	//create marker
+    	marker = new google.maps.Marker({
+    		    position: e.latLng,
+    		    map: map,
+    		    
+    		  });
+		$.get("/?action=searchByLocation&logit="+e.latLng.lat()+"&lat="+e.latLng.lng()+"&range="+50,function(data){
+			$("#data_table tr").remove();
+			//JSON.parse(data)
+			data=JSON.parse(data);
+			//console.log(data);
+			$.each(data,function(k,v){
+				console.log(v);
+				var date=new Date(v.time);
+				$("#data_table").append("<tr>"+
+						"<td>"+date.getMonth()+"/"+date.getDay()+"/"+date.getFullYear()+"</td>"+
+						"<td>"+v.text+"</td>"+
+						"<td>"+v.location+"</td>"+
+						"<td name='user_id'><p data-toggle='popover' data-userid="+v.uid+" >"+v.uid+"</p></td>");
+			});
+			//blind event on userid
+			var element=null;
+		      $('[data-toggle="popover"]').mouseenter(function () {
+		    	 if(element!=null){
+		    		 element.popover('hide');
+		    		 element=null
+		    	 }
+		    	  element=$(this);
+		    	  //request user's info
+		    	  	console.log($(this).data("userid"));
+		    	  	var uer_id=$(this).data("userid");
+					$.get("/?action=getUserInfo&userId="+uer_id,function(user_data){
+					//JSON.parse(data)
+						user_data=JSON.parse(user_data);
+						console.log(user_data);
+						element.popover({
+					          trigger: 'hover',
+					          placement: 'left',
+					          title: 'User Profile',
+					          html: 'true',
+					          content: ContentMethod(user_data),
+					        });
+							element.popover('show');
+					});
+		    	  
+					
+		        });
+		})
+    })
+}
+</script>
+
+</html>

@@ -1,0 +1,126 @@
+.container
+{
+	width: 80%;
+	margin-left:auto;
+	margin-right:auto;
+	width: 1000px;
+	background-color: white;
+}
+
+body
+{
+	background-color: #ecebe8;
+}
+
+header
+{
+	background-color:#F0FFFF;
+	height:100px; 
+	font-family: Georgia;
+	padding-left: 50px;
+}
+
+h1
+{
+	line-height: 100px;
+	padding-left: 20px;
+	height: 100px;
+	margin-bottom: 0;
+	font-weight:bold;
+}
+
+nav
+{
+	background-color:#F0FFFF;
+	border-top: 2px solid #ecebe8;
+	border-bottom: 2px solid #ecebe8;
+	margin-bottom:30px;
+}
+
+nav ul
+{
+	margin-left:50px;
+	list-style-type:none;
+}
+
+nav li
+{
+	background-color:#E1FFFF;
+	padding:2px 5px 2px 5px;
+	display:inline;
+}
+
+.left-col
+{
+	float: left;
+	width: 250px;
+	padding-right:20px;
+	margin-right:20px;
+}
+
+.form-group
+{
+	background-color: #FFFFF0;
+	padding-left:20px;
+	padding-bottom:10px;
+}
+
+#search
+{
+	margin-top:20px;
+}
+
+.group
+{
+	background-color: #FFFFF0;
+	margin-top:100px;
+	width:250px;
+	padding: 20px 0 20px 20px;
+}
+
+li
+{
+	padding-top:5px;
+	list-style:none;
+}
+
+h4
+{
+	font-weight:bold;
+}
+
+label
+{
+	font-size:125%;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+main
+{
+	background-color: #FFFFF0;
+	overflow: hidden;
+    margin-left: 60px;
+    padding: 30px 20px 10px 20px;
+    
+}
+
+table
+{
+	background-color:white;
+}
+
+#kw 
+{
+	width:200px;
+}
+
+#longitude
+{
+	width:200px;
+}
+
+#latitude
+{
+	width:200px;
+}

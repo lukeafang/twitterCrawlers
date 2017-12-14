@@ -15,12 +15,10 @@ if __name__ == '__main__':
 	print('grab user profile.')
 	userID_list = ['34373370', '26257166', '12579252']
 	#grab profile
-	userProfileDict = {}
-	index = 0;
+	userProfileList = [];
 	for userID in userID_list:
 		userProfile = tweetCrawler.get_userProfile(userID)
-		userProfileDict[index] = userProfile
-		index = index + 1
+		userProfileList.append(userProfile)	
 	#save file
 	filePath='output'+os.sep+'userProfile.csv'
 	fieldnames = ['user_id', 'screen_name', 'name', 'location', 'description', 'N_followes', 'N_friends', 'N_statues', 'URL']
@@ -31,18 +29,17 @@ if __name__ == '__main__':
 			writer.writeheader()
 	with open(filePath, "a+") as csvfile:
 	    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)	    
-	    for index in userProfileDict:
-	    	user = userProfileDict[index]
-	    	writer.writerow({'user_id': user['user_id'], 'screen_name': user['screen_name'], 'name': user['name'], 'location': user['location'], 'description': user['description'], 'N_followes': user['N_followes'], 'N_friends': user['N_friends'], 'N_statues': user['N_statues'], 'URL': user['URL']})
-	    	
-	# grab social Network Information
+	    for user in userProfileList:
+	    	writer.writerow({'user_id': user.id, 'screen_name': user.screen_name, 'name': user.name, 'location': user.location, 'description': user.description, 'N_followes': user.followers_count, 'N_friends': user.friends_count, 'N_statues': user.statuses_count, 'URL': user.url})
+
+	#grab social Network Information
 	print('grab social Network Information.')
 	df = pd.DataFrame()
 	for userID in userID_list:
-		friendNameList = tweetCrawler.get_friends(userID, 10)
+		friendNameList = tweetCrawler.get_friends(userID, 20)
 		colName = userID + "'s friends"
 		df[colName] = friendNameList
-		followerNameList = tweetCrawler.get_followers(userID, 10)
+		followerNameList = tweetCrawler.get_followers(userID, 20)
 		colName = userID + "'s followers"
 		df[colName] = followerNameList
 	#save file
@@ -58,10 +55,9 @@ if __name__ == '__main__':
 	#save json file
 	filePath = 'output'+os.sep+'tweets_keyword.json'
 	with open(filePath, 'w') as f:
-		for index in tweets:
+		for tweet in tweets:
 			#save json line by line
-			tweet = tweets[index]
-			json.dump(tweet, f)
+			json.dump(tweet._json, f)
 			f.write('\n')	
 
 	print('search tweets by region:')
@@ -73,10 +69,9 @@ if __name__ == '__main__':
 	#save json file
 	filePath = 'output'+os.sep+'tweets_region.json'
 	with open(filePath, 'w') as f:
-		for index in tweets:
+		for tweet in tweets:
 			#save json line by line
-			tweet = tweets[index]
-			json.dump(tweet, f)
+			json.dump(tweet._json, f)
 			# json.dump(tweet._json,f,sort_keys = True,indent = 4)
 			f.write('\n')
 
